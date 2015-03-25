@@ -1,6 +1,7 @@
 (ns ^:figwheel-always intro.core
-    (:require[om.core :as om :include-macros true]
-              [om.dom :as dom :include-macros true]))
+    (:require [om.core :as om :include-macros true]
+              [om.dom :as dom :include-macros true]
+              [clojure.string :refer [join]]))
 
 (enable-console-print!)
 
@@ -14,10 +15,16 @@
   (reify
     om/IDisplayName
     (display-name [_] "sun-view")
-    om/IRender
-    (render [_]
+    om/IInitState
+    (init-state [_]
+      {:r 200
+       :g 0
+       :b 0})
+    om/IRenderState
+    (render-state [_ {:keys [r g b]}]
       (dom/svg #js {:height 200 :width 200}
-               (dom/circle #js {:r 80 :cx 80 :cy 80})))))
+               (dom/circle #js {:r    80 :cx 80 :cy 80
+                                :fill (str "rgb(" (join "," [r g b]) ")")})))))
 
 (om/root
   (fn [data owner]
