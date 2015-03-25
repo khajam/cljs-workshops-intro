@@ -7,6 +7,9 @@
 
 (println "Edits to this text should show up in your developer console.")
 
+;; utils
+(def l #(.log js/console (join " " %&)))
+
 ;; define your app data so that it doesn't get over-written on reload
 
 (defonce app-state (atom {:text "Hello world!"}))
@@ -25,7 +28,9 @@
       (dom/svg #js {:height 200 :width 200}
                (dom/circle #js {:r           80 :cx 80 :cy 80
                                 :fill        (str "rgb(" (join "," [r g b]) ")")
-                                :onMouseMove #(.log js/console (.-clientX %))})))))
+                                :onMouseMove #(let [x (.-clientX %)]
+                                               (l "x:" x)
+                                               (om/set-state! owner :r x))})))))
 
 (om/root
   (fn [data owner]
@@ -38,8 +43,8 @@
                                   :display        "flex"
                                   :justifyContent "space-around"
                                   :alignItems     "center"}}
-          (dom/h1 nil (:text data))
-          (om/build sun-view data)))))
+                 (om/build sun-view data)
+                 (dom/h1 nil (:text data))))))
   app-state
   {:target (. js/document (getElementById "app"))})
 
