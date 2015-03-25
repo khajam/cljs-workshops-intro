@@ -10,6 +10,10 @@
 ;; utils
 (def l #(.log js/console (join " " %&)))
 
+(defn with-init [f a]
+  (fn [b]
+    (f a b)))
+
 ;; define your app data so that it doesn't get over-written on reload
 
 (defonce app-state (atom {:text "Hello world!"}))
@@ -22,15 +26,19 @@
     (init-state [_]
       {:r 200
        :g 0
-       :b 0})
+       :b 0
+       :rel-x-fn nil})
     om/IRenderState
-    (render-state [_ {:keys [r g b]}]
+    (render-state [_ {:keys [r g b rel-x-fn]}]
       (dom/svg #js {:height 200 :width 200}
-               (dom/circle #js {:r           80 :cx 80 :cy 80
-                                :fill        (str "rgb(" (join "," [r g b]) ")")
-                                :onMouseMove #(let [x (.-clientX %)]
-                                               (l "x:" x)
-                                               (om/set-state! owner :r x))})))))
+               (dom/circle #js {:r            80 :cx 80 :cy 80
+                                :fill         (str "rgb(" (join "," [r g b]) ")")
+                                :onMouseEnter #(let [x (.-clientX %)]
+                                                (om/set-state! owner :rel-x-fn (with-init - x)))
+                                :onMouseMove  #(let [x (.-clientX %)]
+                                                (l "x:" x)
+                                                (l "rel-x:" (rel-x-fn x))
+                                                (om/set-state! owner :r x))})))))
 
 (om/root
   (fn [data owner]
