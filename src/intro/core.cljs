@@ -21,8 +21,9 @@
   (fn [data owner]
     (reify om/IRender
       (render [_]
-        (dom/h1 nil (:text data))
-        (om/build a-component data))))
+        (dom/div nil
+          (dom/h1 nil (:text data))
+          (om/build a-component data)))))
   app-state
   {:target (. js/document (getElementById "app"))})
 
