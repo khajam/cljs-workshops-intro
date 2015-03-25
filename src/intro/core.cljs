@@ -10,14 +10,14 @@
 
 (defonce app-state (atom {:text "Hello world!"}))
 
-(defn a-component [data owner]
+(defn sun-view [data owner]
   (reify
     om/IDisplayName
-    (display-name [_] "a-component")
+    (display-name [_] "sun-view")
     om/IRender
     (render [_]
-      (dom/div nil
-               "a component"))))
+      (dom/svg #js {:height 200 :width 200}
+               (dom/circle #js {:r 80 :cx 80 :cy 80})))))
 
 (om/root
   (fn [data owner]
@@ -26,9 +26,12 @@
       (display-name [_] "ROOT")
       om/IRender
       (render [_]
-        (dom/div nil
+        (dom/div #js {:style #js {:height         "400px"
+                                  :display        "flex"
+                                  :justifyContent "space-around"
+                                  :alignItems     "center"}}
           (dom/h1 nil (:text data))
-          (om/build a-component data)))))
+          (om/build sun-view data)))))
   app-state
   {:target (. js/document (getElementById "app"))})
 
