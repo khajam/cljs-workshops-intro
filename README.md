@@ -4,7 +4,7 @@ We use [figwheel](https://github.com/bhauman/lein-figwheel) to load up a server 
 
 Using Leiningen, we install a figwheel template, also making use of the option to add Om for later use.
 ```
-lein new figwheel comp-events-fns -- --om
+lein new figwheel cljs-workshops-intro -- --om
 ```
 
 ### Development
