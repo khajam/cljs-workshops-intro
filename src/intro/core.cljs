@@ -12,6 +12,8 @@
 
 (defn a-component [data owner]
   (reify
+    om/IDisplayName
+    (display-name [_] "a-component")
     om/IRender
     (render [_]
       (dom/div nil
@@ -19,7 +21,10 @@
 
 (om/root
   (fn [data owner]
-    (reify om/IRender
+    (reify
+      om/IDisplayName
+      (display-name [_] "ROOT")
+      om/IRender
       (render [_]
         (dom/div nil
           (dom/h1 nil (:text data))
