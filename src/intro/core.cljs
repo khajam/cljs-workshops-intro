@@ -38,7 +38,7 @@
                                 :onMouseMove  #(let [x (.-clientX %)]
                                                 (l "x:" x)
                                                 (l "rel-x:" (rel-x-fn x))
-                                                (om/set-state! owner :r x))})))))
+                                                (om/set-state! owner :r (Math/abs (rel-x-fn x))))})))))
 
 (om/root
   (fn [data owner]
