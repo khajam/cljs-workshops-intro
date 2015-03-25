@@ -23,8 +23,9 @@
     om/IRenderState
     (render-state [_ {:keys [r g b]}]
       (dom/svg #js {:height 200 :width 200}
-               (dom/circle #js {:r    80 :cx 80 :cy 80
-                                :fill (str "rgb(" (join "," [r g b]) ")")})))))
+               (dom/circle #js {:r           80 :cx 80 :cy 80
+                                :fill        (str "rgb(" (join "," [r g b]) ")")
+                                :onMouseMove #(.log js/console (.-clientX %))})))))
 
 (om/root
   (fn [data owner]
