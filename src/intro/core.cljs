@@ -18,7 +18,7 @@
   (fn [x]
     (* (/ 1 (- max min)) x)))
 
-((normalize 0 (* 2 80)) 160)
+;((normalize 0 (* 2 80)) 160)
 ;; define your app data so that it doesn't get over-written on reload
 
 (defonce app-state (atom {:text "Hello world!"}))
@@ -31,7 +31,7 @@
     (init-state [_]
       (let [radius 80]
         {:radius       radius
-         :normalize-fn (normalize 0 (* 2 radius))
+         :normalize-fn #(Math/round (* 255 ((normalize 0 (* 2 radius)) %)))
          :r            200
          :g            0
          :b            0
@@ -46,8 +46,8 @@
                                 :onMouseMove  #(let [x (.-clientX %)]
                                                 (l "x:" x)
                                                 (l "rel-x:" (rel-x-fn x))
-                                                (l "nomrd" (Math/round (* 255 (normalize-fn (rel-x-fn x)))))
-                                                (om/set-state! owner :r (Math/round (* 255 (normalize-fn (rel-x-fn x))))))})))))
+                                                (l "nomrd" (normalize-fn (rel-x-fn x)))
+                                                (om/set-state! owner :r (normalize-fn (rel-x-fn x))))})))))
 
 (om/root
   (fn [data owner]
