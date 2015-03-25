@@ -10,11 +10,19 @@
 
 (defonce app-state (atom {:text "Hello world!"}))
 
+(defn a-component [data owner]
+  (reify
+    om/IRender
+    (render [_]
+      (dom/div nil
+               "a component"))))
+
 (om/root
   (fn [data owner]
     (reify om/IRender
       (render [_]
-        (dom/h1 nil (:text data)))))
+        (dom/h1 nil (:text data))
+        (om/build a-component data))))
   app-state
   {:target (. js/document (getElementById "app"))})
 
